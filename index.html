@@ -42,7 +42,7 @@ let W=1600;const obstacles=[],bushes=[],spawns=[[800,800]];let seed=42;
 function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
 function makeWorld(){obstacles.length=bushes.length=0;spawns.length=1;spawns[0]=W===2400?[riverX13(1050),1050]:[800,800];for(let i=0;i<11;i++){let best,dmax=-1;for(let j=0;j<300;j++){let p=[100+rand()*(W-200),100+rand()*(W-200)],d=Math.min(...spawns.map(q=>Math.hypot(p[0]-q[0],p[1]-q[1])));if(d>dmax){best=p;dmax=d}}spawns.push(best)}
 for(let i=0;i<(W===2400?215:90);i++){let x=55+rand()*(W-110),y=55+rand()*(W-110),r=18+rand()*17;if(spawns.some(p=>Math.hypot(x-p[0],y-p[1])<105))continue;obstacles.push({x,y,r,rock:rand()<.27})}
-for(let i=0;i<(W===2400?48:20);i++){let x=100+(i%5)*300+rand()*180,y=100+Math.floor(i/5)*380+rand()*180,r=30+rand()*14;for(let j=0;j<20&&obstacles.some(o=>Math.hypot(o.x-x,o.y-y)<o.r+r);j++){x=60+rand()*(W-120);y=60+rand()*(W-120)}bushes.push({x,y,r})}}
+for(let i=0;i<(W===2400?48:20);i++){let x=W===2400?80+rand()*2240:100+(i%5)*300+rand()*180,y=W===2400?80+rand()*2240:100+Math.floor(i/5)*380+rand()*180,r=30+rand()*14;for(let j=0;j<20&&obstacles.some(o=>Math.hypot(o.x-x,o.y-y)<o.r+r);j++){x=60+rand()*(W-120);y=60+rand()*(W-120)}bushes.push({x,y,r})}}
 makeWorld();
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 // ENTITIES — identical health, speed and weapon damage for everyone. Bounded pools.
@@ -278,7 +278,7 @@ for(let [x,y] of [[1800,480],[2100,480],[1950,790]]){let h={x,y,ruin13:true};rui
 for(let h of houses12.filter(h=>!h.ruin13)){drop(h.x-26,h.y,'gun','shotgun');loot.push({x:h.x+28,y:h.y+18,kind:'bandage13',active:true,ready:0})}
 for(let i=0;i<42;i++){let p={x:70+rand()*(W-140),y:70+rand()*(W-140)};if(!obstacles.some(o=>dist(o,p)<o.r+26))loot.push({...p,kind:i%7===0?'vest13':'bandage13',active:true,ready:0})}
 // Distribute bushes over the whole map, preserving deterministic daily generation.
-for(let b of bushes){if(b.x<1600&&b.y<1600){b.x=80+rand()*2240;b.y=80+rand()*2240}}
+
 for(let a of actors){for(let j=0;j<50&&(water13(a)||obstacles.some(o=>o.hut12?Math.abs(a.x-o.x)<o.hw+24&&Math.abs(a.y-o.y)<o.hh+24:dist(a,o)<o.r+35));j++){a.x=100+rand()*2200;a.y=100+rand()*2200}a.px=a.x;a.py=a.y}
 }
 if(!naz12){for(let i=0;i<400&&obstacles.filter(o=>o.crate).length<45;i++){let o={x:70+rand()*2260,y:70+rand()*2260,r:24,hp:100,crate:true};if(water13(o)||obstacles.some(b=>dist(b,o)<b.r+70)||spawns.some(p=>Math.hypot(p[0]-o.x,p[1]-o.y)<110))continue;obstacles.push(o)}}
